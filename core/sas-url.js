@@ -11,9 +11,6 @@ const { permissions } = require('./blobPermissions');
  * https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview
  */
 exports.generateSASURL = async (containerClient, blobName, contentType, environment, isGetBlob) => {
-    // TODO: how can we find this from the form?
-    const securityLevel = 'IKKESENSITIV';
-    const owner = 'LIVSFORSIKRING-SKADE';
 
     const { sasPostExpires, sasGetExpires, metadata } = environment;
     const blobClient = containerClient.getBlockBlobClient(blobName);
@@ -25,13 +22,7 @@ exports.generateSASURL = async (containerClient, blobName, contentType, environm
     const sasUrl = await blobClient.generateSasUrl(urlOptions);
     const fields = {
         'Content-Type': contentType,
-        'x-ms-meta-securitylevel': securityLevel,
-        'x-ms-meta-owner': owner
     };
-    // for (const name of metadata) {
-    //     fields['x-ms-meta-' + name] = '';
-    // }
-
     return isGetBlob ? sasUrl : { url: sasUrl, fields };
 };
 
