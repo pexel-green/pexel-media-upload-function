@@ -30,7 +30,8 @@ exports.sasUrl = async (args) => {
     // generate response JSON
     const response = {
         body: {
-            putURL
+            putURL,
+            blobName
         },
         statusCode: 200,
         headers: {
