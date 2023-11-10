@@ -24,7 +24,7 @@ exports.sasUrl = async (args) => {
     const containerClient = blobServiceClient.getContainerClient(containerName);
     const blobName = generateUniqueBlobName(container_user, fileExtension);
     console.log({ blobName })
-    const putURL = await generateSASURL(containerClient, blobName, contentType, environment, false);
+    const putURL = await generateSASURL(containerClient, container_user, blobName, contentType, environment, false);
     console.log("putURL", { putURL })
 
     // generate response JSON
@@ -38,7 +38,7 @@ exports.sasUrl = async (args) => {
         }
     };
     if (environment.needGetURL === 'TRUE') {
-        response.body.getURL = await generateSASURL(containerClient, blobName, contentType, environment, true);
+        response.body.getURL = await generateSASURL(containerClient, container_user, blobName, contentType, environment, true);
     }
     return response;
 };
