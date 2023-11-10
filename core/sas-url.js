@@ -10,10 +10,10 @@ const { permissions } = require('./blobPermissions');
  * See also:
  * https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview
  */
-exports.generateSASURL = async (containerClient, container_user, blobName, contentType, environment, isGetBlob) => {
+exports.generateSASURL = async (containerClient, blobName, contentType, environment, isGetBlob) => {
 
     const { sasPostExpires, sasGetExpires, metadata } = environment;
-    const blobClient = containerClient.getBlockBlobClient(`${container_user}/${blobName}`);
+    const blobClient = containerClient.getBlockBlobClient(blobName);
     const urlOptions = {
         permissions: isGetBlob ? permissions.Read : permissions.Write,
         expiresOn: isGetBlob ? getExpiryDate(sasGetExpires) : getExpiryDate(sasPostExpires),
@@ -29,9 +29,9 @@ exports.generateSASURL = async (containerClient, container_user, blobName, conte
 /**
  * Generates a unique blob name for a file that will be uploaded.
  */
-exports.generateUniqueBlobName = (fileExtension) => {
+exports.generateUniqueBlobName = (container_user, fileExtension) => {
     const random = uuid.v4();
-    return `${random}.${fileExtension}`;
+    return `${container_user}/${random}.${fileExtension}`;
 };
 
 const getExpiryDate = expiryTime => new Date(new Date().getTime() + expiryTime * 1000);
