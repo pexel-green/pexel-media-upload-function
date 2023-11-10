@@ -29,9 +29,9 @@ exports.generateSASURL = async (containerClient, blobName, contentType, environm
 /**
  * Generates a unique blob name for a file that will be uploaded.
  */
-exports.generateUniqueBlobName = fileExtension => {
+exports.generateUniqueBlobName = (container_user, fileExtension) => {
     const random = uuid.v4();
-    return `${random}.${fileExtension}`;
+    return `${container_user}/${random}.${fileExtension}`;
 };
 
 const getExpiryDate = expiryTime => new Date(new Date().getTime() + expiryTime * 1000);

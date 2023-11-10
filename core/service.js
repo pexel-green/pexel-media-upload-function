@@ -16,15 +16,13 @@ const { generateUniqueBlobName, generateSASURL } = require('./sas-url.js');
  */
 exports.sasUrl = async (args) => {
     const { body, environment } = args;
-    console.log("VALIDATE B")
-    const { fileExtension, contentType } = validateInput(body, environment);
-    console.log("HELLO", { fileExtension, contentType })
+    const { fileExtension, contentType, container_user } = validateInput(body, environment);
 
     const { accountName, accountKey, containerName } = environment;
     const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
     const blobServiceClient = new BlobServiceClient(getStorageUrl(accountName), sharedKeyCredential);
     const containerClient = blobServiceClient.getContainerClient(containerName);
-    const blobName = generateUniqueBlobName(fileExtension);
+    const blobName = generateUniqueBlobName(container_user, fileExtension);
     console.log({ blobName })
     const putURL = await generateSASURL(containerClient, blobName, contentType, environment, false);
     console.log("putURL", { putURL })

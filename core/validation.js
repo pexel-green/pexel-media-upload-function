@@ -10,7 +10,8 @@ exports.validateInput = (body, environment) => {
 
     return {
         fileExtension,
-        contentType
+        contentType,
+        container_user: body.container
     };
 };
 
